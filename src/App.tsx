@@ -7,31 +7,7 @@ import React, {
 } from 'react';
 import './App.css';
 
-import type * as monaco from 'monaco-editor';
-
-/** last step in a series of hacks */
-const useMonaco = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor>();
-
-  useEffect(() => {
-    (window as any).monacoPromise.then((mon: any) => {
-      const x = mon.editor.create(ref.current, {
-        value: ['function x() {', '\tconsole.log("Hello world!");', '}'].join(
-          '\n',
-        ),
-        // language: 'javascript',
-      });
-
-      setEditor(x);
-    });
-  }, []);
-
-  return [ref, editor] as [
-    RefObject<HTMLDivElement>,
-    monaco.editor.IStandaloneCodeEditor?,
-  ];
-};
+import { useMonaco } from './monaco';
 
 interface AppProps {}
 
@@ -59,7 +35,20 @@ function App({}: AppProps) {
     }
   };
 
-  const [div, editor] = useMonaco();
+  const [div, editor] = useMonaco('yo');
+
+  // useEffect(() => {
+  //   if(editor) {
+
+  //     const resize = () => {
+
+  //     }
+
+  //   }
+  // }, [editor])
+
+  // @ts-ignore
+  window.ee = editor;
 
   useEffect(() => {
     if (editor && content) {
