@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from "../web_modules/react.js";
-import "./App.css.proxy.js";
 import {Editor} from "./monaco.js";
-function App2({}) {
+function App({}) {
   const [fileHandle, setFileHandle] = useState();
   const [content, setContent] = useState();
   const choose = async () => {
@@ -38,4 +37,4 @@ function App2({}) {
     onClick: choose
   }, "Choose a file to edit and share")));
 }
-export default App2;
+export default App;
