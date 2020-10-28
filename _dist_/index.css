@@ -1,0 +1,19 @@
+body {
+  background: #1e1e1e;
+  color: white;
+  margin: 4em;
+
+  font-family: Menlo, Monaco, 'Courier New', monospace;
+}
+
+code {
+  font-family: Menlo, Monaco, 'Courier New', monospace;
+  font-weight: normal;
+  font-size: 12px;
+  font-feature-settings: 'liga' 0, 'calt' 0;
+  line-height: 18px;
+}
+
+a {
+  color: aquamarine;
+}
