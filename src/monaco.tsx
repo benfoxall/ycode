@@ -63,11 +63,12 @@ export const useMonaco = () => {
     monacoPromised.then((mon) => {
       const ed = mon.editor.create(ref.current, {
         value: '',
-        // language: 'javascript',
+        wordWrap: 'on',
       });
 
-      setMon(mon.editor);
+      mon.editor.setTheme('vs-dark');
 
+      setMon(mon);
       setEditor(ed);
     });
   }, []);
@@ -88,7 +89,7 @@ export const useMonaco = () => {
   return [ref, editor, mon] as [
     RefObject<HTMLDivElement>,
     TMonaco.editor.IStandaloneCodeEditor?,
-    typeof TMonaco.editor?,
+    typeof TMonaco?,
   ];
 };
 
@@ -105,7 +106,14 @@ export const Editor: FC<{
 
   useEffect(() => {
     if (editor) {
-      editor.setValue(content);
+      const model = mon?.editor.createModel(
+        content,
+        undefined,
+        mon.Uri.file(name || 'unknown.txt'),
+      );
+
+      // editor.setValue(content);
+      editor.setModel(model!);
 
       const disposable = editor.getModel()?.onDidChangeContent((e) => {
         setChanged(true);
@@ -118,8 +126,6 @@ export const Editor: FC<{
       }
     }
   }, [editor]);
-
-  mon?.setTheme('vs-dark');
 
   const down: KeyboardEventHandler = (e) => {
     if (
@@ -140,6 +146,7 @@ export const Editor: FC<{
     <div className={style.container} onKeyDown={down}>
       <header className={style.header}>
         {name} {changed && '*'}
+        {/* <a href="#">↗︎</a> */}
       </header>
       <div className={style.main} ref={ref} />
     </div>
