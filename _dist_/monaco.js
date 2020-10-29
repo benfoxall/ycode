@@ -37,9 +37,11 @@ export const useMonaco = () => {
   useEffect(() => {
     monacoPromised.then((mon2) => {
       const ed = mon2.editor.create(ref.current, {
-        value: ""
+        value: "",
+        wordWrap: "on"
       });
-      setMon(mon2.editor);
+      mon2.editor.setTheme("vs-dark");
+      setMon(mon2);
       setEditor(ed);
     });
   }, []);
@@ -62,7 +64,8 @@ export const Editor = ({content, name, onChange}) => {
   const [changed, setChanged] = useState(false);
   useEffect(() => {
     if (editor) {
-      editor.setValue(content);
+      const model = mon?.editor.createModel(content, void 0, mon.Uri.file(name || "unknown.txt"));
+      editor.setModel(model);
       const disposable = editor.getModel()?.onDidChangeContent((e) => {
         setChanged(true);
       });
@@ -73,7 +76,6 @@ export const Editor = ({content, name, onChange}) => {
       }
     }
   }, [editor]);
-  mon?.setTheme("vs-dark");
   const down = (e) => {
     if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && e.key == "s") {
       e.preventDefault();
