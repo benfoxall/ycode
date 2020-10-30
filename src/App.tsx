@@ -67,7 +67,7 @@ function App({}: AppProps) {
         <Editor name={fileHandle?.name} content={content} onChange={write} />
       ) : (
         <main>
-          <h1>Recode</h1>
+          <h1>Ycode</h1>
 
           <p>
             <a href="#" onClick={choose}>
