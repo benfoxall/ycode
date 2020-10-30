@@ -1,9 +1,13 @@
 body {
   background: #1e1e1e;
   color: white;
-  margin: 4em;
 
   font-family: Menlo, Monaco, 'Courier New', monospace;
+  margin: 0;
+}
+
+h1 {
+  font-weight: 100;
 }
 
 code {
@@ -16,4 +20,11 @@ code {
 
 a {
   color: aquamarine;
+}
+
+.App {
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
 }

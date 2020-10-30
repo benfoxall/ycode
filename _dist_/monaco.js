@@ -63,19 +63,17 @@ export const Editor = ({content, name, onChange}) => {
   const [ref, editor, mon] = useMonaco();
   const [changed, setChanged] = useState(false);
   useEffect(() => {
-    if (editor) {
-      const model = mon?.editor.createModel(content, void 0, mon.Uri.file(name || "unknown.txt"));
+    if (editor && mon && name) {
+      const model = mon.editor.createModel(content, void 0, mon.Uri.file(name));
       editor.setModel(model);
-      const disposable = editor.getModel()?.onDidChangeContent((e) => {
+      model.onDidChangeContent((e) => {
         setChanged(true);
       });
-      if (disposable) {
-        return () => {
-          disposable.dispose();
-        };
-      }
+      return () => {
+        model.dispose();
+      };
     }
-  }, [editor]);
+  }, [editor, content]);
   const down = (e) => {
     if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && e.key == "s") {
       e.preventDefault();

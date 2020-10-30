@@ -8,7 +8,6 @@ function App({}) {
     setFileHandle(files[0]);
   };
   const write = async (str) => {
-    setContent(str);
     if (fileHandle && content) {
       const writable = await fileHandle.createWritable();
       await writable.write(content);
@@ -23,18 +22,37 @@ function App({}) {
   useEffect(() => {
     document.title = fileHandle ? fileHandle.name : "recode";
   }, [fileHandle]);
-  if (content) {
-    return /* @__PURE__ */ React.createElement(Editor, {
-      name: fileHandle?.name,
-      content,
-      onChange: write
-    });
-  }
+  const [dragging, setDragging] = useState(false);
+  const drop = async (e) => {
+    e.preventDefault();
+    try {
+      const file = e.dataTransfer.items[0];
+      const handle = await file.getAsFileSystemHandle();
+      setFileHandle(handle);
+    } catch (e2) {
+      console.error("err", e2);
+    }
+  };
+  const drag = (e) => {
+    e.preventDefault();
+    setDragging(true);
+  };
+  const dragEnd = (e) => {
+    e.preventDefault();
+    setDragging(false);
+  };
   return /* @__PURE__ */ React.createElement("div", {
-    className: "App"
-  }, /* @__PURE__ */ React.createElement("h1", null, "Recode"), /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("a", {
+    className: "App",
+    onDrop: drop,
+    onDragOver: drag,
+    onDragLeave: dragEnd
+  }, content ? /* @__PURE__ */ React.createElement(Editor, {
+    name: fileHandle?.name,
+    content,
+    onChange: write
+  }) : /* @__PURE__ */ React.createElement("main", null, /* @__PURE__ */ React.createElement("h1", null, "Recode"), /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("a", {
     href: "#",
     onClick: choose
-  }, "Choose a file to edit and share")));
+  }, dragging ? "Drop" : "Choose", " a file to edit and share"))));
 }
 export default App;
