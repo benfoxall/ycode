@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, DragEventHandler } from 'react';
 
 import { Editor } from './monaco';
 
@@ -15,7 +15,7 @@ function App({}: AppProps) {
   };
 
   const write = async (str: string) => {
-    setContent(str);
+    // setContent(str);
 
     if (fileHandle && content) {
       const writable = await fileHandle.createWritable();
@@ -37,21 +37,45 @@ function App({}: AppProps) {
     document.title = fileHandle ? fileHandle.name : 'recode';
   }, [fileHandle]);
 
-  if (content) {
-    return (
-      <Editor name={fileHandle?.name} content={content} onChange={write} />
-    );
-  }
+  const [dragging, setDragging] = useState(false);
+  const drop: DragEventHandler = async (e) => {
+    e.preventDefault();
+    try {
+      const file = e.dataTransfer.items[0];
+
+      const handle = await file.getAsFileSystemHandle();
+
+      setFileHandle(handle as FileSystemFileHandle);
+    } catch (e) {
+      console.error('err', e);
+    }
+  };
+
+  const drag: DragEventHandler = (e) => {
+    e.preventDefault();
+    setDragging(true);
+  };
+
+  const dragEnd: DragEventHandler = (e) => {
+    e.preventDefault();
+    setDragging(false);
+  };
 
   return (
-    <div className="App">
-      <h1>Recode</h1>
+    <div className="App" onDrop={drop} onDragOver={drag} onDragLeave={dragEnd}>
+      {content ? (
+        <Editor name={fileHandle?.name} content={content} onChange={write} />
+      ) : (
+        <main>
+          <h1>Recode</h1>
 
-      <p>
-        <a href="#" onClick={choose}>
-          Choose a file to edit and share
-        </a>
-      </p>
+          <p>
+            <a href="#" onClick={choose}>
+              {dragging ? 'Drop' : 'Choose'} a file to edit and share
+            </a>
+          </p>
+        </main>
+      )}
     </div>
   );
 }

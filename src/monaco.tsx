@@ -105,27 +105,24 @@ export const Editor: FC<{
   const [changed, setChanged] = useState(false);
 
   useEffect(() => {
-    if (editor) {
-      const model = mon?.editor.createModel(
+    if (editor && mon && name) {
+      const model = mon.editor.createModel(
         content,
         undefined,
-        mon.Uri.file(name || 'unknown.txt'),
+        mon.Uri.file(name),
       );
 
-      // editor.setValue(content);
-      editor.setModel(model!);
+      editor.setModel(model);
 
-      const disposable = editor.getModel()?.onDidChangeContent((e) => {
+      model.onDidChangeContent((e) => {
         setChanged(true);
       });
 
-      if (disposable) {
-        return () => {
-          disposable.dispose();
-        };
-      }
+      return () => {
+        model.dispose();
+      };
     }
-  }, [editor]);
+  }, [editor, content]);
 
   const down: KeyboardEventHandler = (e) => {
     if (
