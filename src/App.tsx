@@ -71,7 +71,7 @@ function App({}: AppProps) {
 
           <p>
             <a href="#" onClick={choose}>
-              {dragging ? 'Drop' : 'Choose'} a file to edit and share
+              {dragging ? 'Drop' : 'Choose'} a file to edit {/*and share*/}
             </a>
           </p>
         </main>
