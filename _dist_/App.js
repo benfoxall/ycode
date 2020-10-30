@@ -20,7 +20,7 @@ function App({}) {
     }
   }, [fileHandle]);
   useEffect(() => {
-    document.title = fileHandle ? fileHandle.name : "recode";
+    document.title = fileHandle ? fileHandle.name : "ycode";
   }, [fileHandle]);
   const [dragging, setDragging] = useState(false);
   const drop = async (e) => {
