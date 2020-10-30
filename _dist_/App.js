@@ -50,7 +50,7 @@ function App({}) {
     name: fileHandle?.name,
     content,
     onChange: write
-  }) : /* @__PURE__ */ React.createElement("main", null, /* @__PURE__ */ React.createElement("h1", null, "Recode"), /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("a", {
+  }) : /* @__PURE__ */ React.createElement("main", null, /* @__PURE__ */ React.createElement("h1", null, "Ycode"), /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("a", {
     href: "#",
     onClick: choose
   }, dragging ? "Drop" : "Choose", " a file to edit "))));
