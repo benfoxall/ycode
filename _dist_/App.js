@@ -53,6 +53,6 @@ function App({}) {
   }) : /* @__PURE__ */ React.createElement("main", null, /* @__PURE__ */ React.createElement("h1", null, "Recode"), /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("a", {
     href: "#",
     onClick: choose
-  }, dragging ? "Drop" : "Choose", " a file to edit and share"))));
+  }, dragging ? "Drop" : "Choose", " a file to edit "))));
 }
 export default App;
