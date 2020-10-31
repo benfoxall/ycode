@@ -59,12 +59,12 @@ export const useMonaco = () => {
   return [ref, editor, mon];
 };
 import style from "./monaco.module.css.proxy.js";
-export const Editor = ({content, name, onChange}) => {
+export const Editor = ({value, name, onChange}) => {
   const [ref, editor, mon] = useMonaco();
   const [changed, setChanged] = useState(false);
   useEffect(() => {
     if (editor && mon && name) {
-      const model = mon.editor.createModel(content, void 0, mon.Uri.file(name));
+      const model = mon.editor.createModel(value, void 0, mon.Uri.file(name));
       editor.setModel(model);
       model.onDidChangeContent((e) => {
         setChanged(true);
@@ -73,7 +73,7 @@ export const Editor = ({content, name, onChange}) => {
         model.dispose();
       };
     }
-  }, [editor, content]);
+  }, [editor, value]);
   const down = (e) => {
     if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && e.key == "s") {
       e.preventDefault();
@@ -89,7 +89,10 @@ export const Editor = ({content, name, onChange}) => {
     onKeyDown: down
   }, /* @__PURE__ */ React.createElement("header", {
     className: style.header
-  }, name, " ", changed && "*"), /* @__PURE__ */ React.createElement("div", {
+  }, /* @__PURE__ */ React.createElement("span", null, name, " ", changed && "*"), /* @__PURE__ */ React.createElement("a", {
+    href: "#",
+    className: style.share
+  }, "\u2197\uFE0E")), /* @__PURE__ */ React.createElement("div", {
     className: style.main,
     ref
   }));

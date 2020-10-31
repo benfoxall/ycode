@@ -48,7 +48,7 @@ function App({}) {
     onDragLeave: dragEnd
   }, content ? /* @__PURE__ */ React.createElement(Editor, {
     name: fileHandle?.name,
-    content,
+    value: content,
     onChange: write
   }) : /* @__PURE__ */ React.createElement("main", null, /* @__PURE__ */ React.createElement("h1", null, "Ycode"), /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("a", {
     href: "#",
