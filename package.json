@@ -9,7 +9,10 @@
   "dependencies": {
     "monaco-editor": "^0.21.2",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "y-monaco": "^0.1.1",
+    "y-webrtc": "^10.1.6",
+    "yjs": "^13.4.2"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.10.4",
