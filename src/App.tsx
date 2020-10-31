@@ -64,7 +64,7 @@ function App({}: AppProps) {
   return (
     <div className="App" onDrop={drop} onDragOver={drag} onDragLeave={dragEnd}>
       {content ? (
-        <Editor name={fileHandle?.name} content={content} onChange={write} />
+        <Editor name={fileHandle?.name} value={content} onChange={write} />
       ) : (
         <main>
           <h1>Ycode</h1>

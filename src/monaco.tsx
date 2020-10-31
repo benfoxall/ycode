@@ -97,9 +97,9 @@ import style from './monaco.module.css';
 
 export const Editor: FC<{
   name?: string;
-  content: string;
+  value: string;
   onChange: (s: string) => void;
-}> = ({ content, name, onChange }) => {
+}> = ({ value, name, onChange }) => {
   const [ref, editor, mon] = useMonaco();
 
   const [changed, setChanged] = useState(false);
@@ -107,7 +107,7 @@ export const Editor: FC<{
   useEffect(() => {
     if (editor && mon && name) {
       const model = mon.editor.createModel(
-        content,
+        value,
         undefined,
         mon.Uri.file(name),
       );
@@ -122,7 +122,7 @@ export const Editor: FC<{
         model.dispose();
       };
     }
-  }, [editor, content]);
+  }, [editor, value]);
 
   const down: KeyboardEventHandler = (e) => {
     if (
@@ -142,8 +142,12 @@ export const Editor: FC<{
   return (
     <div className={style.container} onKeyDown={down}>
       <header className={style.header}>
-        {name} {changed && '*'}
-        {/* <a href="#">↗︎</a> */}
+        <span>
+          {name} {changed && '*'}
+        </span>
+        <a href="#" className={style.share}>
+          ↗︎
+        </a>
       </header>
       <div className={style.main} ref={ref} />
     </div>

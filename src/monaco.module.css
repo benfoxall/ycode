@@ -12,9 +12,33 @@
 
 .header {
   flex: 0;
+  display: flex;
+  justify-content: space-between;
 }
 
 .main {
   flex: 1;
   overflow: hidden;
+}
+
+.share {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1em;
+  min-width: 1em;
+  height: 1em;
+  border-radius: 1em;
+  background: aquamarine;
+  color: #000;
+  text-decoration: none;
+}
+
+.share:hover {
+  background: #000;
+  color: aquamarine;
+}
+
+.share:hover:before {
+  content: 'share';
 }
