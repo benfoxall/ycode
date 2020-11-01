@@ -7,15 +7,14 @@ import React, {
   useEffect,
   FC,
   KeyboardEventHandler,
-  useMemo,
 } from 'react';
 import type TMonaco from 'monaco-editor';
 
-import * as Y from 'yjs';
+import type * as Y from 'yjs';
+import type { WebrtcProvider } from 'y-webrtc';
 
 // @ts-expect-error
-import { MonacoBinding } from 'y-monaco';
-import { WebrtcProvider } from 'y-webrtc';
+import { MonacoBinding, _SET_MONACO } from './ext/y-monaco.js';
 
 const baseUrl =
   'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min';
@@ -55,6 +54,8 @@ const monacoPromised = (async () => {
     await new Promise((res) => wat.require(['vs/editor/editor.main'], res));
 
     console.log('loaded monaco');
+
+    _SET_MONACO(wat.monaco);
   }
 
   return wat.monaco;
@@ -104,58 +105,18 @@ import style from './monaco.module.css';
 
 export const Editor: FC<{
   name?: string;
-  value: string;
   onChange: (s: string) => void;
-}> = ({ value, name, onChange }) => {
+  ydoc: Y.Doc;
+  yprovider: WebrtcProvider;
+}> = ({ name, onChange, ydoc, yprovider }) => {
   const [ref, editor, mon] = useMonaco();
 
   const [changed, setChanged] = useState(false);
 
-  /*
-  const [doc, setDoc] = useState(() => new Y.Doc());
-
-  doc.getText('monaco');
-
-  // clean up with hook?
-  const [provider, setProvider] = useState<WebrtcProvider>();
-
-  useEffect(() => {
-    const [name, password] = room.split('~');
-
-    // @ts-expect-error
-    const provider = new WebrtcProvider(name, doc, { password });
-
-    console.log('A PROVIDER', provider);
-    setProvider(provider);
-
-    return () => {
-      setProvider(undefined);
-      console.log('DISCONNECT_PROVIDER');
-
-      provider.disconnect();
-    };
-    // return provider;
-  }, [doc, room]);
-
-  // not quite right with reconnect errors
-  // const provider = useMemo(() => {
-  //   const [name, password] = room.split('~');
-
-  //   console.log('WAT', doc, room);
-
-  //   // @ts-expect-error
-  //   const provider = new WebrtcProvider(name, doc, { password });
-
-  //   return provider;
-  // }, [doc, room]);
-
-  // console.log('Monss', room);
-  */
-
   useEffect(() => {
     if (editor && mon && name) {
       const model = mon.editor.createModel(
-        value,
+        '-replace me-',
         undefined,
         mon.Uri.file(name),
       );
@@ -166,11 +127,21 @@ export const Editor: FC<{
         setChanged(true);
       });
 
+      const type = ydoc.getText('monaco');
+
+      const monacoBinding = new MonacoBinding(
+        type,
+        model,
+        new Set([editor]),
+        yprovider.awareness,
+      );
+
       return () => {
+        monacoBinding.destroy();
         model.dispose();
       };
     }
-  }, [editor, value]);
+  }, [editor]);
 
   const down: KeyboardEventHandler = (e) => {
     if (
