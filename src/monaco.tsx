@@ -7,6 +7,7 @@ import React, {
   useEffect,
   FC,
   KeyboardEventHandler,
+  MouseEventHandler,
 } from 'react';
 import type TMonaco from 'monaco-editor';
 
@@ -137,8 +138,6 @@ export const Editor: FC<{
 
   useEffect(() => {
     if (editor && mon && name) {
-      console.log('NEW MODEL', name);
-
       const model = mon.editor.createModel('_', undefined, mon.Uri.file(name));
 
       model.onDidChangeContent((e) => {
@@ -177,6 +176,31 @@ export const Editor: FC<{
     }
   };
 
+  // copy to clipboard
+  const [copied, setCopied] = useState(false);
+  const clip: MouseEventHandler<HTMLAnchorElement> = async (e) => {
+    e.preventDefault();
+    const { href } = e.currentTarget;
+
+    try {
+      await navigator.clipboard.writeText(href);
+      setCopied(true);
+    } catch (e) {
+      // fallback to open in new window
+      window.open(href);
+    }
+  };
+
+  useEffect(() => {
+    if (copied) {
+      const time = setTimeout(setCopied, 2000, false);
+
+      return () => {
+        clearTimeout(time);
+      };
+    }
+  }, [copied]);
+
   return (
     <div className={style.container} onKeyDown={down}>
       {yconfig.initiator && (
@@ -185,7 +209,13 @@ export const Editor: FC<{
             {name} {changed && '*'}
           </span>
 
-          <a href={'?' + yconfig.room} target="_blank" className={style.share}>
+          <a
+            href={'?' + yconfig.room}
+            target="_blank"
+            className={style.share}
+            onClick={clip}
+          >
+            <em>{copied ? 'link copied!' : 'share'}</em>
             ↗︎
           </a>
         </header>
