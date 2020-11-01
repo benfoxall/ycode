@@ -35,7 +35,7 @@ const ChooseFile: FC<Props> = ({ onFile }) => {
 
       <p>
         <a href="#" onClick={choose}>
-          {dragging ? 'Drop' : 'Choose'} a file to edit {/*and share*/}
+          {dragging ? 'Drop' : 'Choose'} a file to edit
         </a>
       </p>
     </main>
