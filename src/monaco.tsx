@@ -16,6 +16,8 @@ import type { WebrtcProvider } from 'y-webrtc';
 // @ts-expect-error
 import { MonacoBinding, _SET_MONACO } from './ext/y-monaco.js';
 
+import yconfig from './yconfig';
+
 const baseUrl =
   'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min';
 
@@ -106,20 +108,14 @@ import style from './monaco.module.css';
 export const Editor: FC<{
   name?: string;
   onChange: (s: string) => void;
-  ydoc: Y.Doc;
-  yprovider: WebrtcProvider;
-}> = ({ name, onChange, ydoc, yprovider }) => {
+}> = ({ name, onChange }) => {
   const [ref, editor, mon] = useMonaco();
 
   const [changed, setChanged] = useState(false);
 
   useEffect(() => {
     if (editor && mon && name) {
-      const model = mon.editor.createModel(
-        '-replace me-',
-        undefined,
-        mon.Uri.file(name),
-      );
+      const model = mon.editor.createModel('-', undefined, mon.Uri.file(name));
 
       editor.setModel(model);
 
@@ -127,17 +123,17 @@ export const Editor: FC<{
         setChanged(true);
       });
 
-      const type = ydoc.getText('monaco');
+      const type = yconfig.doc.getText('monaco');
 
-      const monacoBinding = new MonacoBinding(
+      new MonacoBinding(
         type,
         model,
         new Set([editor]),
-        yprovider.awareness,
+        yconfig.provider.awareness,
       );
 
       return () => {
-        monacoBinding.destroy();
+        // monacoBinding.destroy();
         model.dispose();
       };
     }
@@ -160,14 +156,17 @@ export const Editor: FC<{
 
   return (
     <div className={style.container} onKeyDown={down}>
-      <header className={style.header}>
-        <span>
-          {name} {changed && '*'}
-        </span>
-        <a href="#" className={style.share}>
-          ↗︎
-        </a>
-      </header>
+      {yconfig.initiator && (
+        <header className={style.header}>
+          <span>
+            {name} {changed && '*'}
+          </span>
+
+          <a href={'?' + yconfig.room} target="_blank" className={style.share}>
+            ↗︎
+          </a>
+        </header>
+      )}
       <div className={style.main} ref={ref} />
     </div>
   );

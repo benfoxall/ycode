@@ -40,28 +40,12 @@ function App({}: AppProps) {
   }, [fileHandle]);
 
   if (yconfig.initiator === false) {
-    return (
-      <Editor
-        name={'follow'}
-        onChange={() => {
-          console.log('nope');
-        }}
-        ydoc={yconfig.doc}
-        yprovider={yconfig.provider}
-      />
-    );
+    return <Editor name="" onChange={() => console.log('nope')} />;
   }
 
   return (
     <PickFile onFile={setFileHandle} file={fileHandle}>
-      {fileHandle && (
-        <Editor
-          name={fileHandle.name}
-          onChange={write}
-          ydoc={yconfig.doc}
-          yprovider={yconfig.provider}
-        />
-      )}
+      {fileHandle && <Editor name={fileHandle.name} onChange={write} />}
     </PickFile>
   );
 }
