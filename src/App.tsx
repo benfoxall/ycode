@@ -40,7 +40,7 @@ function App({}: AppProps) {
   }, [fileHandle]);
 
   if (yconfig.initiator === false) {
-    return <Editor name="" onChange={() => console.log('nope')} />;
+    return <Editor name="unknown" onChange={() => console.log('nope')} />;
   }
 
   return (
