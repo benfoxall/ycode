@@ -10,7 +10,6 @@
     "monaco-editor": "^0.21.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "y-monaco": "^0.1.1",
     "y-webrtc": "^10.1.6",
     "yjs": "^13.4.2"
   },
@@ -30,8 +29,10 @@
     "@types/wicg-file-system-access": "^2020.9.1",
     "@web/test-runner": "^0.9.0",
     "chai": "^4.2.0",
+    "lib0": "^0.2.34",
     "prettier": "^2.0.5",
     "snowpack": "^2.15.1",
-    "typescript": "^4.0.0"
+    "typescript": "^4.0.0",
+    "y-protocols": "^1.0.1"
   }
 }
