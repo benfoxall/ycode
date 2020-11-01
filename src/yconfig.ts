@@ -9,14 +9,18 @@ interface YI {
   initiator: boolean;
 }
 
+const key = ':room:'
+
 // cache because hmr
 const wat = window as any;
 if(!wat.yi) {
   let initiator = true;
-  let room = [
+  let room = sessionStorage.getItem(key) || [
     Math.random().toString(32).slice(2),
     Math.random().toString(32).slice(2),
   ].join('~');
+
+  sessionStorage.setItem(key, room);
 
   if(location.search) {
     initiator = false;
