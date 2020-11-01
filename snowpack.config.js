@@ -10,7 +10,6 @@ module.exports = {
     [
       '@snowpack/plugin-optimize',
       {
-        preloadModules: true,
         minifyHTML: false,
       },
     ],
@@ -25,7 +24,7 @@ module.exports = {
     /* ... */
   },
   buildOptions: {
-    /* ... */
+    baseUrl: '/ycode/',
   },
   proxy: {
     /* ... */
