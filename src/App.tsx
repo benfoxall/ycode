@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DropFile, PickFile } from './components/ChooseFile';
+import { DropFile, PickFile } from './components/PickFile';
 
 import { Editor } from './monaco';
 
@@ -32,16 +32,12 @@ function App({}: AppProps) {
     document.title = fileHandle ? fileHandle.name : 'ycode';
   }, [fileHandle]);
 
-  if (!fileHandle) {
-    return <PickFile onFile={setFileHandle} />;
-  }
-
   return (
-    <DropFile onFile={setFileHandle}>
-      {content && fileHandle.name && (
+    <PickFile onFile={setFileHandle} file={fileHandle}>
+      {content && fileHandle && (
         <Editor name={fileHandle.name} value={content} onChange={write} />
       )}
-    </DropFile>
+    </PickFile>
   );
 }
 

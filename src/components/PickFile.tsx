@@ -7,13 +7,22 @@ import React, {
 } from 'react';
 
 interface Props {
+  file?: FileSystemFileHandle;
   onFile: (handle: FileSystemFileHandle) => void;
 }
 
 const IsDragging = createContext(false);
 
 /** Select by picker or drop  */
-export const PickFile: FC<Props> = ({ onFile }) => {
+export const PickFile: FC<Props> = ({ onFile, file, children }) => (
+  <DropFile onFile={onFile} file={file}>
+    {file ? children : <ChooseFile onFile={onFile} file={file} />}
+  </DropFile>
+);
+
+const ChooseFile: FC<Props> = ({ onFile }) => {
+  const dragging = useContext(IsDragging);
+
   const choose = async () => {
     const files = await window.showOpenFilePicker();
 
@@ -21,25 +30,19 @@ export const PickFile: FC<Props> = ({ onFile }) => {
   };
 
   return (
-    <DropFile onFile={onFile}>
-      <IsDragging.Consumer>
-        {(dragging) => (
-          <main>
-            <h1>Ycode</h1>
+    <main>
+      <h1>Ycode</h1>
 
-            <p>
-              <a href="#" onClick={choose}>
-                {dragging ? 'Drop' : 'Choose'} a file to edit {/*and share*/}
-              </a>
-            </p>
-          </main>
-        )}
-      </IsDragging.Consumer>
-    </DropFile>
+      <p>
+        <a href="#" onClick={choose}>
+          {dragging ? 'Drop' : 'Choose'} a file to edit {/*and share*/}
+        </a>
+      </p>
+    </main>
   );
 };
 
-export const DropFile: FC<Props> = ({ onFile, children }) => {
+const DropFile: FC<Props> = ({ onFile, children }) => {
   const [dragging, setDragging] = useState(false);
 
   const dragOver: DragEventHandler = (e) => {
