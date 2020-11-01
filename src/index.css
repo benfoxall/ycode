@@ -28,3 +28,23 @@ a {
   flex-direction: column;
   padding: 2em;
 }
+
+.yRemoteSelection {
+  background-color: rgba(255, 0, 200, 0.418);
+}
+.yRemoteSelectionHead {
+  position: absolute;
+  border-left: aquamarine solid 2px;
+  border-top: aquamarine solid 2px;
+  border-bottom: aquamarine solid 2px;
+  height: 100%;
+  box-sizing: border-box;
+}
+.yRemoteSelectionHead::after {
+  position: absolute;
+  content: ' ';
+  border: 3px solid aquamarine;
+  border-radius: 4px;
+  left: -4px;
+  top: -5px;
+}
