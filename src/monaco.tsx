@@ -7,8 +7,15 @@ import React, {
   useEffect,
   FC,
   KeyboardEventHandler,
+  useMemo,
 } from 'react';
 import type TMonaco from 'monaco-editor';
+
+import * as Y from 'yjs';
+
+// @ts-expect-error
+import { MonacoBinding } from 'y-monaco';
+import { WebrtcProvider } from 'y-webrtc';
 
 const baseUrl =
   'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min';
@@ -103,6 +110,47 @@ export const Editor: FC<{
   const [ref, editor, mon] = useMonaco();
 
   const [changed, setChanged] = useState(false);
+
+  /*
+  const [doc, setDoc] = useState(() => new Y.Doc());
+
+  doc.getText('monaco');
+
+  // clean up with hook?
+  const [provider, setProvider] = useState<WebrtcProvider>();
+
+  useEffect(() => {
+    const [name, password] = room.split('~');
+
+    // @ts-expect-error
+    const provider = new WebrtcProvider(name, doc, { password });
+
+    console.log('A PROVIDER', provider);
+    setProvider(provider);
+
+    return () => {
+      setProvider(undefined);
+      console.log('DISCONNECT_PROVIDER');
+
+      provider.disconnect();
+    };
+    // return provider;
+  }, [doc, room]);
+
+  // not quite right with reconnect errors
+  // const provider = useMemo(() => {
+  //   const [name, password] = room.split('~');
+
+  //   console.log('WAT', doc, room);
+
+  //   // @ts-expect-error
+  //   const provider = new WebrtcProvider(name, doc, { password });
+
+  //   return provider;
+  // }, [doc, room]);
+
+  // console.log('Monss', room);
+  */
 
   useEffect(() => {
     if (editor && mon && name) {

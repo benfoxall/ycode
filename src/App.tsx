@@ -1,4 +1,5 @@
-import React, { useState, useEffect, DragEventHandler } from 'react';
+import React, { useState, useEffect } from 'react';
+import { DropFile, PickFile } from './components/ChooseFile';
 
 import { Editor } from './monaco';
 
@@ -7,12 +8,6 @@ interface AppProps {}
 function App({}: AppProps) {
   const [fileHandle, setFileHandle] = useState<FileSystemFileHandle>();
   const [content, setContent] = useState<string>();
-
-  const choose = async () => {
-    const files = await window.showOpenFilePicker();
-
-    setFileHandle(files[0]);
-  };
 
   const write = async (str: string) => {
     // setContent(str);
@@ -37,46 +32,16 @@ function App({}: AppProps) {
     document.title = fileHandle ? fileHandle.name : 'ycode';
   }, [fileHandle]);
 
-  const [dragging, setDragging] = useState(false);
-  const drop: DragEventHandler = async (e) => {
-    e.preventDefault();
-    try {
-      const file = e.dataTransfer.items[0];
-
-      const handle = await file.getAsFileSystemHandle();
-
-      setFileHandle(handle as FileSystemFileHandle);
-    } catch (e) {
-      console.error('err', e);
-    }
-  };
-
-  const drag: DragEventHandler = (e) => {
-    e.preventDefault();
-    setDragging(true);
-  };
-
-  const dragEnd: DragEventHandler = (e) => {
-    e.preventDefault();
-    setDragging(false);
-  };
+  if (!fileHandle) {
+    return <PickFile onFile={setFileHandle} />;
+  }
 
   return (
-    <div className="App" onDrop={drop} onDragOver={drag} onDragLeave={dragEnd}>
-      {content ? (
-        <Editor name={fileHandle?.name} value={content} onChange={write} />
-      ) : (
-        <main>
-          <h1>Ycode</h1>
-
-          <p>
-            <a href="#" onClick={choose}>
-              {dragging ? 'Drop' : 'Choose'} a file to edit {/*and share*/}
-            </a>
-          </p>
-        </main>
+    <DropFile onFile={setFileHandle}>
+      {content && fileHandle.name && (
+        <Editor name={fileHandle.name} value={content} onChange={write} />
       )}
-    </div>
+    </DropFile>
   );
 }
 
