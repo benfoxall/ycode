@@ -1,10 +1,16 @@
 // https://github.com/yjs/y-monaco/blob/master/src/y-monaco.js
 
 import * as Y from 'yjs';
-import * as monaco from 'monaco-editor';
+// import * as monaco from 'monaco-editor';
 import * as error from 'lib0/error.js';
 import { createMutex } from 'lib0/mutex.js';
 import { Awareness } from 'y-protocols/awareness.js'; // eslint-disable-line
+
+// injectable monaco
+let monaco;
+export const _SET_MONACO = (val) => {
+  monaco = val;
+};
 
 class RelativeSelection {
   /**
