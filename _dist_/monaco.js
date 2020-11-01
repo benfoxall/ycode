@@ -62,23 +62,41 @@ export const useMonaco = () => {
   return [ref, editor, mon];
 };
 import style from "./monaco.module.css.proxy.js";
-export const Editor = ({name, onChange}) => {
+export const Editor = ({onChange}) => {
   const [ref, editor, mon] = useMonaco();
   const [changed, setChanged] = useState(false);
+  const [name, setName] = useState();
+  useEffect(() => {
+    const name2 = yconfig2.doc.getText("monaco:name");
+    let val = name2;
+    const callback = (f) => {
+      if (f.adds.length) {
+        const current = name2.toJSON();
+        if (current !== val) {
+          setName(current);
+          val = current;
+        }
+      }
+    };
+    name2.observe(callback);
+    return () => {
+      name2.unobserve(callback);
+    };
+  }, []);
   useEffect(() => {
     if (editor && mon && name) {
-      const model = mon.editor.createModel("-", void 0, mon.Uri.file(name));
-      editor.setModel(model);
+      const model = mon.editor.createModel("_", void 0, mon.Uri.file(name));
       model.onDidChangeContent((e) => {
         setChanged(true);
       });
-      const type = yconfig2.doc.getText("monaco");
+      const type = yconfig2.doc.getText("monaco:content");
       new MonacoBinding(type, model, new Set([editor]), yconfig2.provider.awareness);
+      editor.setModel(model);
       return () => {
         model.dispose();
       };
     }
-  }, [editor]);
+  }, [editor, name]);
   const down = (e) => {
     if ((window.navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey) && e.key == "s") {
       e.preventDefault();
@@ -89,6 +107,25 @@ export const Editor = ({name, onChange}) => {
       }
     }
   };
+  const [copied, setCopied] = useState(false);
+  const clip = async (e) => {
+    e.preventDefault();
+    const {href} = e.currentTarget;
+    try {
+      await navigator.clipboard.writeText(href);
+      setCopied(true);
+    } catch (e2) {
+      window.open(href);
+    }
+  };
+  useEffect(() => {
+    if (copied) {
+      const time = setTimeout(setCopied, 2e3, false);
+      return () => {
+        clearTimeout(time);
+      };
+    }
+  }, [copied]);
   return /* @__PURE__ */ React.createElement("div", {
     className: style.container,
     onKeyDown: down
@@ -97,8 +134,9 @@ export const Editor = ({name, onChange}) => {
   }, /* @__PURE__ */ React.createElement("span", null, name, " ", changed && "*"), /* @__PURE__ */ React.createElement("a", {
     href: "?" + yconfig2.room,
     target: "_blank",
-    className: style.share
-  }, "\u2197\uFE0E")), /* @__PURE__ */ React.createElement("div", {
+    className: style.share,
+    onClick: clip
+  }, /* @__PURE__ */ React.createElement("em", null, copied ? "link copied!" : "share"), "\u2197\uFE0E")), /* @__PURE__ */ React.createElement("div", {
     className: style.main,
     ref
   }));
