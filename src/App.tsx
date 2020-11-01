@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DropFile, PickFile } from './components/PickFile';
+import { PickFile } from './components/PickFile';
 
 import { Editor } from './monaco';
 
