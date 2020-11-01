@@ -28,7 +28,7 @@ function App({}) {
   }, [fileHandle]);
   if (yconfig2.initiator === false) {
     return /* @__PURE__ */ React.createElement(Editor, {
-      name: "",
+      name: "unknown",
       onChange: () => console.log("nope")
     });
   }
