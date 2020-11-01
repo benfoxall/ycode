@@ -1,6 +1,11 @@
 {
   "imports": {
+    "lib0/error.js": "./lib0/error.js",
+    "lib0/mutex.js": "./lib0/mutex.js",
     "react": "./react.js",
-    "react-dom": "./react-dom.js"
+    "react-dom": "./react-dom.js",
+    "y-protocols/awareness.js": "./y-protocols/awareness.js",
+    "y-webrtc": "./y-webrtc.js",
+    "yjs": "./yjs.js"
   }
 }
