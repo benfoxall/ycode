@@ -7,10 +7,9 @@ interface AppProps {}
 
 function App({}: AppProps) {
   const [fileHandle, setFileHandle] = useState<FileSystemFileHandle>();
-  const [content, setContent] = useState<string>();
 
   const write = async (str: string) => {
-    if (fileHandle && content) {
+    if (fileHandle) {
       const writable = await fileHandle.createWritable();
       await writable.write(str);
       await writable.close();
@@ -23,14 +22,17 @@ function App({}: AppProps) {
         .getFile()
         .then((file) => file.text())
         .then((text) => {
-          const tdoc = yconfig.doc.getText('monaco');
+          const tdoc = yconfig.doc.getText('monaco:content');
 
-          // hack, clear out contents
-          tdoc.insert(0, '--');
-          tdoc.delete(0, 1000000);
+          // hack?, clear out contents
+          if (tdoc.toJSON()) tdoc.delete(0, 1000000);
           tdoc.insert(0, text);
 
-          setContent(text);
+          const namedoc = yconfig.doc.getText('monaco:name');
+
+          // hack?, clear out contents
+          if (namedoc.toJSON()) namedoc.delete(0, 1000000);
+          namedoc.insert(0, fileHandle.name);
         });
     }
   }, [fileHandle]);
@@ -39,15 +41,15 @@ function App({}: AppProps) {
     document.title = fileHandle ? fileHandle.name : 'ycode';
   }, [fileHandle]);
 
-  if (yconfig.initiator === false) {
-    return <Editor name="unknown" onChange={() => console.log('nope')} />;
+  if (yconfig.initiator) {
+    return (
+      <PickFile onFile={setFileHandle} file={fileHandle}>
+        <Editor onChange={write} />
+      </PickFile>
+    );
+  } else {
+    return <Editor onChange={() => console.log('nope')} />;
   }
-
-  return (
-    <PickFile onFile={setFileHandle} file={fileHandle}>
-      {fileHandle && <Editor name={fileHandle.name} onChange={write} />}
-    </PickFile>
-  );
 }
 
 export default App;

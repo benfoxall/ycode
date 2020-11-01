@@ -11,7 +11,6 @@ import React, {
 import type TMonaco from 'monaco-editor';
 
 import type * as Y from 'yjs';
-import type { WebrtcProvider } from 'y-webrtc';
 
 // @ts-expect-error
 import { MonacoBinding, _SET_MONACO } from './ext/y-monaco.js';
@@ -106,24 +105,47 @@ export const useMonaco = () => {
 import style from './monaco.module.css';
 
 export const Editor: FC<{
-  name?: string;
+  // name?: string;
   onChange: (s: string) => void;
-}> = ({ name, onChange }) => {
+}> = ({ onChange }) => {
   const [ref, editor, mon] = useMonaco();
 
   const [changed, setChanged] = useState(false);
 
+  const [name, setName] = useState<string>();
+
+  useEffect(() => {
+    const name = yconfig.doc.getText('monaco:name');
+
+    let val = name;
+
+    const callback = (f: Y.YTextEvent) => {
+      if (f.adds.length) {
+        const current = name.toJSON();
+        if (current !== val) {
+          setName(current);
+          val = current;
+        }
+      }
+    };
+    name.observe(callback);
+
+    return () => {
+      name.unobserve(callback);
+    };
+  }, []);
+
   useEffect(() => {
     if (editor && mon && name) {
-      const model = mon.editor.createModel('-', undefined, mon.Uri.file(name));
+      console.log('NEW MODEL', name);
 
-      editor.setModel(model);
+      const model = mon.editor.createModel('_', undefined, mon.Uri.file(name));
 
       model.onDidChangeContent((e) => {
         setChanged(true);
       });
 
-      const type = yconfig.doc.getText('monaco');
+      const type = yconfig.doc.getText('monaco:content');
 
       new MonacoBinding(
         type,
@@ -132,12 +154,13 @@ export const Editor: FC<{
         yconfig.provider.awareness,
       );
 
+      editor.setModel(model);
+
       return () => {
-        // monacoBinding.destroy();
         model.dispose();
       };
     }
-  }, [editor]);
+  }, [editor, name]);
 
   const down: KeyboardEventHandler = (e) => {
     if (
