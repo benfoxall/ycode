@@ -1,1 +1,53 @@
-import e,{createContext as E,useContext as m,useState as d}from"../../web_modules/react.js";const c=E(!1);export const PickFile=({onFile:n,file:t,children:a})=>e.createElement(u,{onFile:n,file:t},t?a:e.createElement(p,{onFile:n,file:t}));const p=({onFile:n})=>{const t=m(c),a=async()=>{const o=await window.showOpenFilePicker();n(o[0])};return e.createElement("main",null,e.createElement("h1",null,"Ycode"),e.createElement("p",null,e.createElement("a",{href:"#",onClick:a},t?"Drop":"Choose"," a file to edit")))},u=({onFile:n,children:t})=>{const[a,o]=d(!1),_=r=>{r.preventDefault(),o(!0)},l=r=>{r.preventDefault(),o(!1)},i=async r=>{r.preventDefault();try{const s=r.dataTransfer.items[0],g=await s.getAsFileSystemHandle();n(g)}catch(s){console.error("err",s)}};return e.createElement("div",{className:"App",onDrop:i,onDragOver:_,onDragLeave:l},e.createElement(c.Provider,{value:a},t))};
+import React, {
+  createContext,
+  useContext,
+  useState
+} from "../../web_modules/react.js";
+const IsDragging = createContext(false);
+export const PickFile = ({onFile, file, children}) => /* @__PURE__ */ React.createElement(DropFile, {
+  onFile,
+  file
+}, file ? children : /* @__PURE__ */ React.createElement(ChooseFile, {
+  onFile,
+  file
+}));
+const ChooseFile = ({onFile}) => {
+  const dragging = useContext(IsDragging);
+  const choose = async () => {
+    const files = await window.showOpenFilePicker();
+    onFile(files[0]);
+  };
+  return /* @__PURE__ */ React.createElement("main", null, /* @__PURE__ */ React.createElement("h1", null, "Ycode"), /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("a", {
+    href: "#",
+    onClick: choose
+  }, dragging ? "Drop" : "Choose", " a file to edit")));
+};
+const DropFile = ({onFile, children}) => {
+  const [dragging, setDragging] = useState(false);
+  const dragOver = (e) => {
+    e.preventDefault();
+    setDragging(true);
+  };
+  const dragLeave = (e) => {
+    e.preventDefault();
+    setDragging(false);
+  };
+  const drop = async (e) => {
+    e.preventDefault();
+    try {
+      const file = e.dataTransfer.items[0];
+      const handle = await file.getAsFileSystemHandle();
+      onFile(handle);
+    } catch (e2) {
+      console.error("err", e2);
+    }
+  };
+  return /* @__PURE__ */ React.createElement("div", {
+    className: "App",
+    onDrop: drop,
+    onDragOver: dragOver,
+    onDragLeave: dragLeave
+  }, /* @__PURE__ */ React.createElement(IsDragging.Provider, {
+    value: dragging
+  }, children));
+};
