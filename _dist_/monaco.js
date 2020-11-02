@@ -6,11 +6,14 @@ import React, {
 import {MonacoBinding, _SET_MONACO} from "./ext/y-monaco.js";
 import yconfig2 from "./yconfig.js";
 const baseUrl = "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min";
+const integrity = "sha512-dx6A3eMO/vvLembE8xNGc3RKUytoTIX3rNO5uMEhzhqnXYx1X5XYmjfZP7vxYv7x3gBhdj7Pgys8DUjdbDaLAA==";
 const monacoPromised = (async () => {
   const wat = window;
   if (!wat.require) {
     const scr = document.createElement("script");
     scr.setAttribute("src", `${baseUrl}/vs/loader.min.js`);
+    scr.setAttribute("integrity", integrity);
+    scr.setAttribute("crossorigin", "anonymous");
     const load = new Promise((res) => scr.addEventListener("load", res));
     document.head.append(scr);
     await load;
