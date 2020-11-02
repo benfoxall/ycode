@@ -1,4 +1,4 @@
-# YCode
+# yCode
 
 Edit your local files with remote people.
 
