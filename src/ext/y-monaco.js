@@ -1,4 +1,14 @@
-// https://github.com/yjs/y-monaco/blob/master/src/y-monaco.js
+/*
+
+This is a local copy of:
+  https://github.com/yjs/y-monaco/blob/master/src/y-monaco.js
+
+
+It's needed because I've got an odd way of importing monaco so 
+had to inject it with _SET_MONACO.
+
+*/
+ 
 
 import * as Y from 'yjs';
 // import * as monaco from 'monaco-editor';
