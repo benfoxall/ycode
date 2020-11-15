@@ -20,3 +20,7 @@
   flex: 1;
   overflow: hidden;
 }
+
+.saveHint {
+  color: #fc0;
+}

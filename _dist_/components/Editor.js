@@ -10,6 +10,7 @@ export const Editor = ({onChange}) => {
   const [ref, editor, mon] = useMonaco();
   const [changed, setChanged] = useState(false);
   const [name, setName] = useState();
+  const [help, setHelp] = useState(true);
   useEffect(() => {
     const name2 = yconfig2.doc.getText("monaco:name");
     let val = name2;
@@ -30,8 +31,12 @@ export const Editor = ({onChange}) => {
   useEffect(() => {
     if (editor && mon && name) {
       const model = mon.editor.createModel("_", void 0, mon.Uri.file(name));
+      let first = true;
       model.onDidChangeContent(() => {
-        setChanged(true);
+        if (!first) {
+          setChanged(true);
+        }
+        first = false;
       });
       const type = yconfig2.doc.getText("monaco:content");
       _SET_MONACO(mon);
@@ -49,6 +54,7 @@ export const Editor = ({onChange}) => {
       if (v) {
         onChange(v);
         setChanged(false);
+        setHelp(false);
       }
     }
   };
@@ -76,7 +82,9 @@ export const Editor = ({onChange}) => {
     onKeyDown: down
   }, yconfig2.initiator && /* @__PURE__ */ React.createElement("header", {
     className: style.header
-  }, /* @__PURE__ */ React.createElement("span", null, name, " ", changed && "*"), /* @__PURE__ */ React.createElement("a", {
+  }, /* @__PURE__ */ React.createElement("span", null, name, " ", changed && "*"), changed && help && /* @__PURE__ */ React.createElement("span", {
+    className: style.saveHint
+  }, "[use `\u2318 + s` to save changes]"), /* @__PURE__ */ React.createElement("a", {
     href: "?" + yconfig2.room,
     target: "_blank",
     onClick: clip
