@@ -1,11 +1,7 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { PickFile } from './components/PickFile';
 import yconfig from './yconfig';
-
-const Editor = lazy(
-  () => import(/* webpackPrefetch: true */ './components/Editor'),
-);
-
+import Editor from './components/Editor';
 interface AppProps {}
 
 function App({}: AppProps) {
@@ -47,17 +43,11 @@ function App({}: AppProps) {
   if (yconfig.initiator) {
     return (
       <PickFile onFile={setFileHandle} file={fileHandle}>
-        <Suspense fallback="">
-          <Editor onChange={write} />
-        </Suspense>
+        <Editor onChange={write} />
       </PickFile>
     );
   } else {
-    return (
-      <Suspense fallback="">
-        <Editor onChange={() => console.warn('save ignored')} />
-      </Suspense>
-    );
+    return <Editor onChange={() => console.warn('save ignored')} />;
   }
 }
 
