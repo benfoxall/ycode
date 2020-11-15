@@ -1,7 +1,7 @@
-import React, {useState, useEffect, lazy, Suspense} from "../web_modules/react.js";
+import React, {useState, useEffect} from "../web_modules/react.js";
 import {PickFile as PickFile2} from "./components/PickFile.js";
 import yconfig2 from "./yconfig.js";
-const Editor = lazy(() => import(/* webpackPrefetch: true */ "./components/Editor.js"));
+import Editor2 from "./components/Editor.js";
 function App({}) {
   const [fileHandle, setFileHandle] = useState();
   const write = async (str) => {
@@ -32,17 +32,13 @@ function App({}) {
     return /* @__PURE__ */ React.createElement(PickFile2, {
       onFile: setFileHandle,
       file: fileHandle
-    }, /* @__PURE__ */ React.createElement(Suspense, {
-      fallback: ""
-    }, /* @__PURE__ */ React.createElement(Editor, {
+    }, /* @__PURE__ */ React.createElement(Editor2, {
       onChange: write
-    })));
-  } else {
-    return /* @__PURE__ */ React.createElement(Suspense, {
-      fallback: ""
-    }, /* @__PURE__ */ React.createElement(Editor, {
-      onChange: () => console.warn("save ignored")
     }));
+  } else {
+    return /* @__PURE__ */ React.createElement(Editor2, {
+      onChange: () => console.warn("save ignored")
+    });
   }
 }
 export default App;
