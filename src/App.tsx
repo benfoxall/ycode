@@ -2,8 +2,9 @@ import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { PickFile } from './components/PickFile';
 import yconfig from './yconfig';
 
-const preload = import('./components/Editor');
-const Editor = lazy(() => preload);
+const Editor = lazy(
+  () => import(/* webpackPrefetch: true */ './components/Editor'),
+);
 
 interface AppProps {}
 
