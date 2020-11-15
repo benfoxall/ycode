@@ -77,14 +77,19 @@ export const useMonaco = () => {
   const [editor, setEditor] = useState<TMonaco.editor.IStandaloneCodeEditor>();
   const [mon, setMon] = useState<typeof TMonaco.editor>();
 
+  const lightMode = useMediaQuery('(prefers-color-scheme: light)');
+  useEffect(() => {
+    if (mon) {
+      (mon as any).editor.setTheme(lightMode ? 'vs-light' : 'vs-dark');
+    }
+  }, [mon, lightMode]);
+
   useEffect(() => {
     monacoPromised.then((mon) => {
       const ed = mon.editor.create(ref.current, {
         value: '',
         wordWrap: 'on',
       });
-
-      mon.editor.setTheme('vs-dark');
 
       setMon(mon);
       setEditor(ed);
@@ -112,6 +117,7 @@ export const useMonaco = () => {
 };
 
 import style from './monaco.module.css';
+import { useMediaQuery } from './hooks.js';
 
 export const Editor: FC<{
   // name?: string;
