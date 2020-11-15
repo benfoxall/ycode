@@ -25,6 +25,8 @@ export const PickFile: FC<Props> = ({ onFile, file, children }) => (
 const ChooseFile: FC<Props> = ({ onFile }) => {
   const dragging = useContext(IsDragging);
 
+  const supported = 'showOpenFilePicker' in window;
+
   const choose = async () => {
     const files = await window.showOpenFilePicker();
 
@@ -39,9 +41,17 @@ const ChooseFile: FC<Props> = ({ onFile }) => {
       </header>
 
       <p>
-        <a href="#" onClick={choose}>
-          {dragging ? 'Drop' : 'Select'} a file to get started
-        </a>
+        {supported ? (
+          <a href="#" onClick={choose}>
+            {dragging ? 'Drop' : 'Select'} a file to get started
+          </a>
+        ) : (
+          <span className={styles.info}>
+            <a href="https://caniuse.com/native-filesystem-api">
+              File System Access isn’t supported by this browser yet 😢
+            </a>
+          </span>
+        )}
       </p>
 
       <footer>
