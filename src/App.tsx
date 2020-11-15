@@ -38,7 +38,7 @@ function App({}: AppProps) {
   }, [fileHandle]);
 
   useEffect(() => {
-    document.title = fileHandle ? fileHandle.name : 'ycode';
+    document.title = fileHandle ? fileHandle.name : 'yCode';
   }, [fileHandle]);
 
   if (yconfig.initiator) {
