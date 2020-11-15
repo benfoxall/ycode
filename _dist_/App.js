@@ -1,8 +1,7 @@
 import React, {useState, useEffect, lazy, Suspense} from "../web_modules/react.js";
 import {PickFile as PickFile2} from "./components/PickFile.js";
 import yconfig2 from "./yconfig.js";
-const preload = import("./components/Editor.js");
-const Editor = lazy(() => preload);
+const Editor = lazy(() => import(/* webpackPrefetch: true */ "./components/Editor.js"));
 function App({}) {
   const [fileHandle, setFileHandle] = useState();
   const write = async (str) => {
