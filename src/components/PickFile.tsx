@@ -6,6 +6,8 @@ import React, {
   useState,
 } from 'react';
 
+import styles from './main.module.css';
+
 interface Props {
   file?: FileSystemFileHandle;
   onFile: (handle: FileSystemFileHandle) => void;
@@ -30,14 +32,23 @@ const ChooseFile: FC<Props> = ({ onFile }) => {
   };
 
   return (
-    <main>
-      <h1>Ycode</h1>
+    <main className={styles.container}>
+      <header>
+        <h1 className={styles.title}>yCode</h1>
+        <p>Edit local files with remote people</p>
+      </header>
 
       <p>
         <a href="#" onClick={choose}>
-          {dragging ? 'Drop' : 'Choose'} a file to edit
+          {dragging ? 'Drop' : 'Select'} a file to get started
         </a>
       </p>
+
+      <footer>
+        <p>
+          <a href="https://github.com/benfoxall/ycode">benfoxall/ycode</a>
+        </p>
+      </footer>
     </main>
   );
 };

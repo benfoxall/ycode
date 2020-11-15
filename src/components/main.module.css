@@ -1,0 +1,33 @@
+.container {
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+  font-size: 2rem;
+  font-weight: 800;
+  /* border: 1px solid blue; */
+  min-height: calc(100vh - 2em);
+  justify-content: space-between;
+}
+
+.container header > * {
+  margin: 0;
+}
+
+.container header {
+  font-size: 4rem;
+}
+
+.title {
+  color: aquamarine;
+  font-size: 1rem;
+  margin-bottom: 0em;
+}
+
+.container footer {
+  font-size: 1rem;
+  margin: 0;
+}
+.container a {
+  color: inherit;
+}
