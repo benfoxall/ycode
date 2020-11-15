@@ -3,6 +3,7 @@ import React, {
   useContext,
   useState
 } from "../../web_modules/react.js";
+import styles from "./main.module.css.proxy.js";
 const IsDragging = createContext(false);
 export const PickFile = ({onFile, file, children}) => /* @__PURE__ */ React.createElement(DropFile, {
   onFile,
@@ -17,10 +18,16 @@ const ChooseFile = ({onFile}) => {
     const files = await window.showOpenFilePicker();
     onFile(files[0]);
   };
-  return /* @__PURE__ */ React.createElement("main", null, /* @__PURE__ */ React.createElement("h1", null, "Ycode"), /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("a", {
+  return /* @__PURE__ */ React.createElement("main", {
+    className: styles.container
+  }, /* @__PURE__ */ React.createElement("header", null, /* @__PURE__ */ React.createElement("h1", {
+    className: styles.title
+  }, "yCode"), /* @__PURE__ */ React.createElement("p", null, "Edit local files with remote people")), /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("a", {
     href: "#",
     onClick: choose
-  }, dragging ? "Drop" : "Choose", " a file to edit")));
+  }, dragging ? "Drop" : "Select", " a file to get started")), /* @__PURE__ */ React.createElement("footer", null, /* @__PURE__ */ React.createElement("p", null, /* @__PURE__ */ React.createElement("a", {
+    href: "https://github.com/benfoxall/ycode"
+  }, "benfoxall/ycode"))));
 };
 const DropFile = ({onFile, children}) => {
   const [dragging, setDragging] = useState(false);
