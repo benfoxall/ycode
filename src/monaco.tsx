@@ -217,14 +217,8 @@ export const Editor: FC<{
             {name} {changed && '*'}
           </span>
 
-          <a
-            href={'?' + yconfig.room}
-            target="_blank"
-            className={style.share}
-            onClick={clip}
-          >
-            <em>{copied ? 'link copied!' : 'share'}</em>
-            ↗︎
+          <a href={'?' + yconfig.room} target="_blank" onClick={clip}>
+            {copied ? 'link copied!' : 'share ↗︎'}
           </a>
         </header>
       )}

@@ -20,31 +20,3 @@
   flex: 1;
   overflow: hidden;
 }
-
-.share {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1em;
-  min-width: 1.5em;
-  min-height: 1.5em;
-  border-radius: 0.5em;
-  background: aquamarine;
-  color: #000;
-  text-decoration: none;
-  padding: 0;
-}
-
-.share:hover {
-  background: #000;
-  color: aquamarine;
-  padding: 0 0.5em;
-}
-
-.share em {
-  display: none;
-  padding: 0.5em;
-}
-.share:hover em {
-  display: block;
-}
