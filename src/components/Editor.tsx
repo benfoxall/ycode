@@ -28,6 +28,8 @@ export const Editor: FC<{
 
   const [name, setName] = useState<string>();
 
+  const [help, setHelp] = useState(true);
+
   useEffect(() => {
     const name = yconfig.doc.getText('monaco:name');
 
@@ -53,8 +55,12 @@ export const Editor: FC<{
     if (editor && mon && name) {
       const model = mon.editor.createModel('_', undefined, mon.Uri.file(name));
 
+      let first = true;
       model.onDidChangeContent(() => {
-        setChanged(true);
+        if (!first) {
+          setChanged(true);
+        }
+        first = false;
       });
 
       const type = yconfig.doc.getText('monaco:content');
@@ -87,6 +93,7 @@ export const Editor: FC<{
       if (v) {
         onChange(v);
         setChanged(false);
+        setHelp(false);
       }
     }
   };
@@ -123,6 +130,12 @@ export const Editor: FC<{
           <span>
             {name} {changed && '*'}
           </span>
+
+          {changed && help && (
+            <span className={style.saveHint}>
+              [use `⌘ + s` to save changes]
+            </span>
+          )}
 
           <a href={'?' + yconfig.room} target="_blank" onClick={clip}>
             {copied ? 'link copied!' : 'share ↗︎'}
