@@ -4,10 +4,12 @@ export { r as default } from './common/index-6e8bac3e.js';
 
 
 
+var Suspense = react.Suspense;
 var createContext = react.createContext;
+var lazy = react.lazy;
 var useContext = react.useContext;
 var useEffect = react.useEffect;
 var useMemo = react.useMemo;
 var useRef = react.useRef;
 var useState = react.useState;
-export { createContext, useContext, useEffect, useMemo, useRef, useState };
+export { Suspense, createContext, lazy, useContext, useEffect, useMemo, useRef, useState };

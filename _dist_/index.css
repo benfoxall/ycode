@@ -1,27 +1,26 @@
+:root {
+  --background: #1e1e1e;
+  --foreground: #fff;
+  --highlight: aquamarine;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --background: #fff;
+    --foreground: #1e1e1e;
+    --highlight: #08f;
+  }
+}
+
 body {
-  background: #1e1e1e;
-  color: white;
+  background: var(--background);
+  color: var(--foreground);
   font-family: Menlo, Monaco, 'Courier New', monospace;
   margin: 0;
 }
 
-@media (prefers-color-scheme: light) {
-  body {
-    background: white;
-    color: #1e1e1e;
-  }
-}
-
-code {
-  font-family: Menlo, Monaco, 'Courier New', monospace;
-  font-weight: normal;
-  font-size: 12px;
-  font-feature-settings: 'liga' 0, 'calt' 0;
-  line-height: 18px;
-}
-
 a {
-  color: aquamarine;
+  color: var(--highlight);
   text-decoration: none;
 }
 

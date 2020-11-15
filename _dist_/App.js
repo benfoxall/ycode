@@ -1,7 +1,8 @@
-import React, {useState, useEffect} from "../web_modules/react.js";
+import React, {useState, useEffect, lazy, Suspense} from "../web_modules/react.js";
 import {PickFile as PickFile2} from "./components/PickFile.js";
-import {Editor} from "./components/monaco.js";
 import yconfig2 from "./yconfig.js";
+const preload = import("./components/Editor.js");
+const Editor = lazy(() => preload);
 function App({}) {
   const [fileHandle, setFileHandle] = useState();
   const write = async (str) => {
@@ -26,19 +27,23 @@ function App({}) {
     }
   }, [fileHandle]);
   useEffect(() => {
-    document.title = fileHandle ? fileHandle.name : "ycode";
+    document.title = fileHandle ? fileHandle.name : "yCode";
   }, [fileHandle]);
   if (yconfig2.initiator) {
     return /* @__PURE__ */ React.createElement(PickFile2, {
       onFile: setFileHandle,
       file: fileHandle
+    }, /* @__PURE__ */ React.createElement(Suspense, {
+      fallback: ""
     }, /* @__PURE__ */ React.createElement(Editor, {
       onChange: write
-    }));
+    })));
   } else {
-    return /* @__PURE__ */ React.createElement(Editor, {
+    return /* @__PURE__ */ React.createElement(Suspense, {
+      fallback: ""
+    }, /* @__PURE__ */ React.createElement(Editor, {
       onChange: () => console.warn("save ignored")
-    });
+    }));
   }
 }
 export default App;
