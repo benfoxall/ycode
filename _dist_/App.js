@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "../web_modules/react.js";
 import {PickFile as PickFile2} from "./components/PickFile.js";
-import {Editor} from "./monaco.js";
+import {Editor} from "./components/monaco.js";
 import yconfig2 from "./yconfig.js";
 function App({}) {
   const [fileHandle, setFileHandle] = useState();
@@ -37,7 +37,7 @@ function App({}) {
     }));
   } else {
     return /* @__PURE__ */ React.createElement(Editor, {
-      onChange: () => console.log("nope")
+      onChange: () => console.warn("save ignored")
     });
   }
 }

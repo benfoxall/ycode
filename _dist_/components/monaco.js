@@ -2,9 +2,9 @@ import React, {
   useRef,
   useState,
   useEffect
-} from "../web_modules/react.js";
-import {MonacoBinding, _SET_MONACO} from "./ext/y-monaco.js";
-import yconfig2 from "./yconfig.js";
+} from "../../web_modules/react.js";
+import {MonacoBinding, _SET_MONACO} from "../ext/y-monaco.js";
+import yconfig2 from "../yconfig.js";
 const baseUrl = "https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min";
 const integrity = "sha512-dx6A3eMO/vvLembE8xNGc3RKUytoTIX3rNO5uMEhzhqnXYx1X5XYmjfZP7vxYv7x3gBhdj7Pgys8DUjdbDaLAA==";
 const monacoPromised = (async () => {
@@ -40,13 +40,18 @@ export const useMonaco = () => {
   const ref = useRef(null);
   const [editor, setEditor] = useState();
   const [mon, setMon] = useState();
+  const lightMode = useMediaQuery("(prefers-color-scheme: light)");
+  useEffect(() => {
+    if (mon) {
+      mon.editor.setTheme(lightMode ? "vs-light" : "vs-dark");
+    }
+  }, [mon, lightMode]);
   useEffect(() => {
     monacoPromised.then((mon2) => {
       const ed = mon2.editor.create(ref.current, {
         value: "",
         wordWrap: "on"
       });
-      mon2.editor.setTheme("vs-dark");
       setMon(mon2);
       setEditor(ed);
     });
@@ -65,6 +70,7 @@ export const useMonaco = () => {
   return [ref, editor, mon];
 };
 import style from "./monaco.module.css.proxy.js";
+import {useMediaQuery} from "./hooks.js";
 export const Editor = ({onChange}) => {
   const [ref, editor, mon] = useMonaco();
   const [changed, setChanged] = useState(false);
@@ -137,9 +143,8 @@ export const Editor = ({onChange}) => {
   }, /* @__PURE__ */ React.createElement("span", null, name, " ", changed && "*"), /* @__PURE__ */ React.createElement("a", {
     href: "?" + yconfig2.room,
     target: "_blank",
-    className: style.share,
     onClick: clip
-  }, /* @__PURE__ */ React.createElement("em", null, copied ? "link copied!" : "share"), "\u2197\uFE0E")), /* @__PURE__ */ React.createElement("div", {
+  }, copied ? "link copied!" : "share \u2197\uFE0E")), /* @__PURE__ */ React.createElement("div", {
     className: style.main,
     ref
   }));

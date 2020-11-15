@@ -5,6 +5,13 @@ body {
   margin: 0;
 }
 
+@media (prefers-color-scheme: light) {
+  body {
+    background: white;
+    color: #1e1e1e;
+  }
+}
+
 code {
   font-family: Menlo, Monaco, 'Courier New', monospace;
   font-weight: normal;

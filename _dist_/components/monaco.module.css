@@ -1,0 +1,22 @@
+.container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 1em;
+}
+
+.header {
+  flex: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.main {
+  flex: 1;
+  overflow: hidden;
+}
