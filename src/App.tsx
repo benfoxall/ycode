@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PickFile } from './components/PickFile';
-import { Editor } from './components/monaco';
+import { Editor } from './components/Editor';
 import yconfig from './yconfig';
 
 interface AppProps {}
