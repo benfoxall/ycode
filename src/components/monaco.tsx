@@ -14,9 +14,9 @@ import type TMonaco from 'monaco-editor';
 import type * as Y from 'yjs';
 
 // @ts-expect-error
-import { MonacoBinding, _SET_MONACO } from './ext/y-monaco.js';
+import { MonacoBinding, _SET_MONACO } from '../ext/y-monaco.js';
 
-import yconfig from './yconfig';
+import yconfig from '../yconfig';
 
 // https://cdnjs.com/libraries/monaco-editor
 

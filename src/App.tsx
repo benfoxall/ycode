@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PickFile } from './components/PickFile';
-import { Editor } from './monaco';
+import { Editor } from './components/monaco';
 import yconfig from './yconfig';
 
 interface AppProps {}
@@ -48,7 +48,7 @@ function App({}: AppProps) {
       </PickFile>
     );
   } else {
-    return <Editor onChange={() => console.log('nope')} />;
+    return <Editor onChange={() => console.warn('save ignored')} />;
   }
 }
 
