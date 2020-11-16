@@ -3,7 +3,7 @@ import React, {
   useContext,
   useState
 } from "../../web_modules/react.js";
-import styles from "./main.module.css.proxy.js";
+import styles from "./PickFile.module.css.proxy.js";
 const IsDragging = createContext(false);
 export const PickFile = ({onFile, file, children}) => /* @__PURE__ */ React.createElement(DropFile, {
   onFile,
