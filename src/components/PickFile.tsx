@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 
-import styles from './main.module.css';
+import styles from './PickFile.module.css';
 
 interface Props {
   file?: FileSystemFileHandle;
