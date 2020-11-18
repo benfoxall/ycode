@@ -13,11 +13,22 @@ const baseUrl =
 const integrity =
   'sha512-dx6A3eMO/vvLembE8xNGc3RKUytoTIX3rNO5uMEhzhqnXYx1X5XYmjfZP7vxYv7x3gBhdj7Pgys8DUjdbDaLAA==';
 
-const monacoPromised = (async () => {
-  // don't show typescript how hacky I am
-  const wat = window as any;
 
-  if (!wat.require) {
+/*
+  Load Monaco from CDN
+
+  (seemed easier than importing with snowpack)
+
+  https://github.com/microsoft/monaco-editor/blob/master/docs/integrate-amd-cross.md#option-1-use-a-data-worker-uri
+*/
+const monacoPromised = (async () => {
+  // hide how hacky I am from TypeScript
+  const win = window as any;
+
+  /*
+    Step 1, load the monaco loader (adds window.require)
+  */
+  if (!win.require) {// hmr
     const scr = document.createElement('script');
     scr.setAttribute('src', `${baseUrl}/vs/loader.min.js`);
     scr.setAttribute('integrity', integrity);
@@ -27,40 +38,38 @@ const monacoPromised = (async () => {
     document.head.append(scr);
 
     await load;
-    console.log('loaded require');
   }
 
-  if (!wat.monaco) {
-    wat.require.config({ paths: { vs: `${baseUrl}/vs` } });
+  /*
+    Step 2, load monaco (adds window.monaco)
+  */
+  if (!win.monaco) {// hmr
+    win.require.config({ paths: { vs: `${baseUrl}/vs` } });
 
-    wat.MonacoEnvironment = { getWorkerUrl: () => proxy };
+    win.MonacoEnvironment = { getWorkerUrl: () => proxy };
     let proxy = URL.createObjectURL(
       new Blob(
         [
           `
-        self.MonacoEnvironment = {
-            baseUrl: '${baseUrl}'
-        };
+        self.MonacoEnvironment = { baseUrl: '${baseUrl}' };
         importScripts('${baseUrl}/vs/base/worker/workerMain.min.js');
-    `,
+        `,
         ],
         { type: 'text/javascript' },
       ),
     );
 
-    await new Promise((res) => wat.require(['vs/editor/editor.main'], res));
-
-    console.log('loaded monaco');
+    await new Promise((res) => win.require(['vs/editor/editor.main'], res));
   }
 
-  return wat.monaco;
+  return win.monaco as typeof TMonaco;
 })();
 
 /** last step in a series of hacks */
 export const useMonaco = () => {
   const ref = useRef<HTMLDivElement>(null);
   const [editor, setEditor] = useState<TMonaco.editor.IStandaloneCodeEditor>();
-  const [mon, setMon] = useState<typeof TMonaco.editor>();
+  const [mon, setMon] = useState<typeof TMonaco>();
 
   const lightMode = useMediaQuery('(prefers-color-scheme: light)');
   useEffect(() => {
@@ -71,7 +80,8 @@ export const useMonaco = () => {
 
   useEffect(() => {
     monacoPromised.then((mon) => {
-      const ed = mon.editor.create(ref.current, {
+      // fixme: invariant(ref.current)
+      const ed = mon.editor.create(ref.current!, {
         value: '',
         wordWrap: 'on',
       });
