@@ -19,6 +19,6 @@ if (location.search) {
 }
 const doc = new Y.Doc();
 const [name, password] = room.split("~");
-const provider = new WebrtcProvider(name, doc, {password});
+const provider = new WebrtcProvider(name, doc, {password, signaling: ["wss://y-ben.fly.dev"]});
 const config = {room, doc, provider, initiator};
 export default config;
