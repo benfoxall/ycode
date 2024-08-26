@@ -36,7 +36,7 @@ const [name, password] = room.split('~');
 
 // @ts-expect-error
 // WebrtcProvider expects full Opts object, though it seems that Partial<Opts> works okay
-const provider = new WebrtcProvider(name, doc, { password });
+const provider = new WebrtcProvider(name, doc, { password, signaling: ['wss://y-signal-ben.fly.dev', 'wss://signaling.yjs.dev'] });
 
 const config: YI = { room, doc, provider, initiator };
 
