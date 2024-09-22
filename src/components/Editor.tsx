@@ -67,13 +67,16 @@ export const Editor: FC<{
 
       _SET_MONACO(mon);
 
-      new MonacoBinding(
-        type,
-        model,
-        new Set([editor]),
-        yconfig.provider.awareness,
-      );
+      yconfig.provider.then(provider => {
+        new MonacoBinding(
+          type,
+          model,
+          new Set([editor]),
+          provider.awareness,
+        );
+      })
 
+      
       editor.setModel(model);
 
       return () => {

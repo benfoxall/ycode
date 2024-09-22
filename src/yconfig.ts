@@ -8,7 +8,7 @@ if (import.meta.hot) {
 
 interface YI {
   doc: Y.Doc;
-  provider: WebrtcProvider;
+  provider: Promise<WebrtcProvider>;
   room: string;
   initiator: boolean;
 }
@@ -34,9 +34,33 @@ const doc = new Y.Doc();
 
 const [name, password] = room.split('~');
 
-// @ts-expect-error
-// WebrtcProvider expects full Opts object, though it seems that Partial<Opts> works okay
-const provider = new WebrtcProvider(name, doc, { password, signaling: ['wss://y-ben.fly.dev'] });
+const provider = fetch('https://nice.benfoxall.workers.dev/')
+  .then((res) => res.json())
+  .then((config) => {
+    // correct iterable ice servers
+    if (config?.iceServers && !Array.isArray(config?.iceServers)) {
+      console.log('correcting ice servers');
+      config.iceServers = [config.iceServers];
+    }
+
+    // nest for peerOpts
+    return config;
+  })
+  .catch(() => undefined)
+  .then((config) => {
+    // @ts-expect-error
+    // WebrtcProvider expects full Opts object, though it seems that Partial<Opts> works okay
+    const provider = new WebrtcProvider(name, doc, {
+      password: null,
+      signaling: ['wss://y-ben.fly.dev'],
+      filterBcConns: false,
+      peerOpts: config ? { config } : undefined,
+    });
+
+    console.log('INIT PROVIDER', provider);
+
+    return provider;
+  });
 
 const config: YI = { room, doc, provider, initiator };
 
