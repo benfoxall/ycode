@@ -40,7 +40,9 @@ export const Editor = ({onChange}) => {
       });
       const type = yconfig2.doc.getText("monaco:content");
       _SET_MONACO(mon);
-      new MonacoBinding(type, model, new Set([editor]), yconfig2.provider.awareness);
+      yconfig2.provider.then((provider) => {
+        new MonacoBinding(type, model, new Set([editor]), provider.awareness);
+      });
       editor.setModel(model);
       return () => {
         model.dispose();

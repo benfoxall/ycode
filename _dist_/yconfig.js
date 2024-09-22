@@ -19,6 +19,21 @@ if (location.search) {
 }
 const doc = new Y.Doc();
 const [name, password] = room.split("~");
-const provider = new WebrtcProvider(name, doc, {password, signaling: ["wss://y-ben.fly.dev"]});
+const provider = fetch("https://nice.benfoxall.workers.dev/").then((res) => res.json()).then((config2) => {
+  if (config2?.iceServers && !Array.isArray(config2?.iceServers)) {
+    console.log("correcting ice servers");
+    config2.iceServers = [config2.iceServers];
+  }
+  return config2;
+}).catch(() => void 0).then((config2) => {
+  const provider2 = new WebrtcProvider(name, doc, {
+    password: null,
+    signaling: ["wss://y-ben.fly.dev"],
+    filterBcConns: false,
+    peerOpts: config2 ? {config: config2} : void 0
+  });
+  console.log("INIT PROVIDER", provider2);
+  return provider2;
+});
 const config = {room, doc, provider, initiator};
 export default config;
